@@ -10,7 +10,6 @@ nyan.addEventListener('ended', function() {
 }, false);
 nyan.play();
 
-
 var neneCanvas = document.createElement('canvas');
 var nene = document.createElement('div');
 nene.style.width = '80px';
@@ -26,7 +25,16 @@ neneRainbow.style.left = '-90px';
 neneRainbow.style.top = '0px';
 neneRainbow.style.width = '90px';
 neneRainbow.style.height = '45px';
-neneRainbow.style.background = '-webkit-linear-gradient(top, #d91a12 15%, #e13300 15%, #ff7f14 16%, #f2ab03 32%, #ebc000 32%, #fade00 33%, #efff03 48%, #56fc02 49%, #52ff01 66%, #4ade7e 67%, #3baaf2 67%, #3baaf2 84%, #7337f7 84%, #6b40f2 100%)';
+var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+var isFirefox = typeof InstallTrigger !== 'undefined';
+var isChrome = !!window.chrome && !isOpera;
+var prefix = '';
+if (isFirefox) {
+	prefix = '-moz-';
+} else if (isChrome) {
+	prefix = '-webkit-';
+};
+neneRainbow.style.background = prefix + 'linear-gradient(top, #d91a12 15%, #e13300 15%, #ff7f14 16%, #f2ab03 32%, #ebc000 32%, #fade00 33%, #efff03 48%, #56fc02 49%, #52ff01 66%, #4ade7e 67%, #3baaf2 67%, #3baaf2 84%, #7337f7 84%, #6b40f2 100%)';
 nene.appendChild(neneRainbow);
 
 /**
@@ -76,7 +84,7 @@ function move(div, speed, dx, dy) {
 	var s = dy / Math.sqrt(dx * dx + dy * dy);
 	div.style.left = (div.offsetLeft + speed * c) + 'px';
 	div.style.top = (div.offsetTop + speed * s) + jiggle + 'px';
-}
+};
 
 /**
  * @param start Start coordinate
@@ -87,8 +95,9 @@ var setSpeed = function(start, end) {
 	var dx = end[0] - start[0];
 	var dy = end[1] - start[1];
 	return Math.max(3, Math.abs(dx + dy) / Math.sqrt(dx * dx + dy * dy) * 2);
-}
+};
 
+// Remove this for bookmarklet
 window.addEventListener('load', function() {
 	document.body.appendChild(nene);
 	var b = document.getElementsByTagName('body')[0];
