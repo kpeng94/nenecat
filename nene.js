@@ -3,6 +3,8 @@ var jiggleUp = true;
 var destination;
 // Loop nyancat code
 var interval;
+
+// Audio
 var nyan = new Audio('http://web.mit.edu/kpeng94/www/nene/nyancat.mp3');
 nyan.addEventListener('ended', function() {
 	this.currentTime = 0;
@@ -10,7 +12,6 @@ nyan.addEventListener('ended', function() {
 }, false);
 nyan.play();
 
-var neneCanvas = document.createElement('canvas');
 var nene = document.createElement('div');
 nene.style.width = '80px';
 nene.style.height = '50px';
@@ -25,6 +26,10 @@ neneRainbow.style.left = '-90px';
 neneRainbow.style.top = '0px';
 neneRainbow.style.width = '90px';
 neneRainbow.style.height = '45px';
+
+/**
+ * Obtained from Stack Overflow, browser check
+ */ 
 var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 var isFirefox = typeof InstallTrigger !== 'undefined';
 var isChrome = !!window.chrome && !isOpera;
@@ -56,6 +61,11 @@ var randomMovement = function(div) {
 	}
 }
 
+/** 
+ * @param div Div to move
+ * @param start Start point
+ * @param end End (target) point 
+ */
 var moveToTarget = function(div, start, end) {
 	var speed = setSpeed(start, end);
 	var dx = end[0] - div.offsetLeft;
@@ -63,7 +73,14 @@ var moveToTarget = function(div, start, end) {
 	move(div, speed, dx, dy);
 }
 
-function move(div, speed, dx, dy) {
+/**
+ * @param div Div to move
+ * @param speed Speed to move at
+ * @param dx delta x
+ * @param dy delta y
+ */
+var move = function(div, speed, dx, dy) {
+	// Jiggling nyan
 	if (jiggle >= -4 && jiggle <= 4) {
 		if (jiggleUp) {
 			jiggle-= 0.75;
@@ -80,6 +97,7 @@ function move(div, speed, dx, dy) {
 		}
 		jiggleUp = !jiggleUp;
 	}
+	
 	var c = dx / Math.sqrt(dx * dx + dy * dy);
 	var s = dy / Math.sqrt(dx * dx + dy * dy);
 	div.style.left = (div.offsetLeft + speed * c) + 'px';
@@ -97,7 +115,7 @@ var setSpeed = function(start, end) {
 	return Math.max(3, Math.abs(dx + dy) / Math.sqrt(dx * dx + dy * dy) * 2);
 };
 
-// Remove this for bookmarklet
+// Remove window.addEventListener for bookmarklet
 window.addEventListener('load', function() {
 	document.body.appendChild(nene);
 	var b = document.getElementsByTagName('body')[0];
